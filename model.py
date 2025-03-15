@@ -53,7 +53,7 @@ def clean_text(text):
 df['content'] = df['content'].apply(clean_text)  # Apply text cleaning
 print(df)
 
-print("-------------------------------------------------------------------")
+print("-------------------------- data cleaning is done :) -----------------------------------------")
 # Convert text to numerical data using TF-IDF
 vectorizer = TfidfVectorizer(stop_words='english', max_features=5000)
 X = vectorizer.fit_transform(df['content'])
@@ -77,7 +77,7 @@ y_pred = model.predict(X_test)
 print("Accuracy:", accuracy_score(y_test, y_pred))
 print(classification_report(y_test, y_pred))
 
-#####============== now lets plot :) 
+#------------------- now lets plot :) -------------------------
 
 
 # Extract the classification report as a dictionary
@@ -110,7 +110,6 @@ plt.tight_layout()
 plt.show()
 
 
-
 # Extract the content for fake and real news
 fake_news = df[df['label'] == 0]['content'].str.cat(sep=' ')
 real_news = df[df['label'] == 1]['content'].str.cat(sep=' ')
@@ -134,3 +133,34 @@ plt.axis('off')
 
 plt.tight_layout()
 plt.show()
+
+# -------- NOW LETS PUT A NEWS AND CHECK ITS FAKE OR NOT---------- #
+
+# Function to predict if a news article is fake or real
+def predict_news(news):
+    # Step 1: Clean the input news text
+    cleaned_news = clean_text(news)
+    
+    # Step 2: Convert the cleaned text to numerical data using the same vectorizer
+    news_vectorized = vectorizer.transform([cleaned_news])
+    
+    # Step 3: Use the trained model to predict
+    prediction = model.predict(news_vectorized)
+    
+    # Step 4: Return the result
+    if prediction == 0:
+        return "Fake"
+    else:
+        return "Real"
+
+# Example 
+
+news_input_1 = "NASA Announces New Mission to Mars with Next-Generation Spacecraft. NASA has officially announced the next mission to Mars, aimed at exploring the planet's surface with an advanced spacecraft equipped with state-of-the-art technology. The mission is set to launch in 2024."
+
+news_input_2 = "Scientists Prove the Earth is Flat - Shocking Discovery. In an unbelievable breakthrough, scientists have recently discovered that the Earth is actually flat. This shocking revelation has been hidden for centuries, and now the truth is finally out."
+
+result = predict_news(news_input_1)
+print(f"The news is: {result}")
+
+result = predict_news(news_input_2)
+print(f"The news is: {result}")
