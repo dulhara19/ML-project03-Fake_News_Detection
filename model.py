@@ -213,8 +213,8 @@ news_input_1 = "NASA Announces New Mission to Mars with Next-Generation Spacecra
 
 news_input_2 = "Scientists Prove the Earth is Flat - Shocking Discovery. In an unbelievable breakthrough, scientists have recently discovered that the Earth is actually flat. This shocking revelation has been hidden for centuries, and now the truth is finally out."
 
-result = predict_news(news_input_1)
-print(f"The news is: {result}")
+result1 = predict_news(news_input_1)
+print(f"The news is: {result1}")
 
-result = predict_news(news_input_2)
-print(f"The news is: {result}")
+result2 = predict_news(news_input_2)
+print(f"The news is: {result2}")
