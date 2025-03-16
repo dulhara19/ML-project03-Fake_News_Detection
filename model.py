@@ -11,6 +11,7 @@ import seaborn as sns
 from sklearn.metrics import classification_report
 from sklearn.metrics import confusion_matrix
 from wordcloud import WordCloud
+from collections import Counter
 
 # Load the dataset
 df = pd.read_csv("news.csv")
@@ -133,6 +134,59 @@ plt.axis('off')
 
 plt.tight_layout()
 plt.show()
+
+
+
+##----------------------------plotting most used words in fake and real news---------------------------------------------
+
+# Function to get most common words
+def get_most_common_words(text_series, n=20):
+    words = ' '.join(text_series).split()  # Join all text and split into words
+    word_counts = Counter(words)  # Count word frequencies
+    return word_counts.most_common(n)  # Return top n words
+
+# Get most common words for fake and real news
+fake_common_words = get_most_common_words(fake_news)
+real_common_words = get_most_common_words(real_news)
+
+# Convert to DataFrame for visualization
+fake_df = pd.DataFrame(fake_common_words, columns=['Word', 'Frequency'])
+real_df = pd.DataFrame(real_common_words, columns=['Word', 'Frequency'])
+
+# Plot bar charts
+plt.figure(figsize=(12, 5))
+
+plt.subplot(1, 2, 1)
+sns.barplot(x='Frequency', y='Word', data=fake_df, palette='Reds_r')
+plt.title("Most Common Words in Fake News")
+
+plt.subplot(1, 2, 2)
+sns.barplot(x='Frequency', y='Word', data=real_df, palette='Blues_r')
+plt.title("Most Common Words in Real News")
+
+plt.tight_layout()
+plt.show()
+
+# Generate Word Clouds
+fake_wordcloud = WordCloud(width=500, height=300, background_color='white').generate(' '.join(fake_news))
+real_wordcloud = WordCloud(width=500, height=300, background_color='white').generate(' '.join(real_news))
+
+# Display Word Clouds
+plt.figure(figsize=(12, 5))
+
+plt.subplot(1, 2, 1)
+plt.imshow(fake_wordcloud, interpolation='bilinear')
+plt.axis("off")
+plt.title("Word Cloud - Fake News")
+
+plt.subplot(1, 2, 2)
+plt.imshow(real_wordcloud, interpolation='bilinear')
+plt.axis("off")
+plt.title("Word Cloud - Real News")
+
+plt.show()
+
+#-------------------------------------------------------------------------
 
 # -------- NOW LETS PUT A NEWS AND CHECK ITS FAKE OR NOT---------- #
 
